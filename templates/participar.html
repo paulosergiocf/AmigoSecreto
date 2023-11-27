@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+  <div class="page">
+    <section id="participar" class="container participar">
+        <div class="container">
+           <!-- Adicionando classes Bootstrap aos campos -->
+          <form method="post" action="{% url 'participar' %}">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="nome" name="nome">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1" onchange="toggleSubmit()">
+                <label class="form-check-label" for="exampleCheck1">Confirmo que minhas informações estão corretas</label>
+            </div>
+            <button type="submit" class="btn btn-primary" id="submitButton" disabled>Confirmar</button>
+          </form>
+        </div>
+    </section>
+    <script src="{% static 'js/permitirConfirmar.js' %}" defer></script>
+</div>
+  
+{% endblock %}

@@ -1,0 +1,11 @@
+
+.inicio, .participar {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
