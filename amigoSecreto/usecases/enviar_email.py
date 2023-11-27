@@ -6,10 +6,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class ServidorEmail:
-    def __init__(self, servidor, porta):
+    def __init__(self):
         self.__remetente = str(os.getenv('OUTLOOKMAIL'))
         self.__pass = str(os.getenv('OUTLOOKPASS'))
-        self.__conexao = smtplib.SMTP(servidor, porta)
+        self.__servidor = str(os.getenv('OUTLOOKSERVERSMTP'))
+        self.__porta = str(os.getenv('OUTLOOKSERVERSMTPPORTA'))
+        self.__conexao = smtplib.SMTP(self.__servidor, self.__porta)
     
     
     def login(self):
