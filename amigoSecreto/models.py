@@ -14,6 +14,7 @@ class ParametrosDoSorteio(models.Model):
 
     data_sorteio = models.DateField()
     valorMaximoPresente = models.FloatField(default=0.0)
+    situacao = models.BooleanField(default=True)
     
     def __str__(self):
         return self.data_sorteio.strftime('%Y-%m-%d')
