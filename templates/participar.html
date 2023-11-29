@@ -6,9 +6,12 @@
     <section id="participar" class="container participar">
         <div class="container">
            <!-- Adicionando classes Bootstrap aos campos -->
-          <form method="post" action="{% url 'participar' %}">
+          <form method="post" action="{% url 'participar' codigo=codigo %}">
             {% csrf_token %}
-
+            <div class="mb-3">
+              <label for="{{ form.codigo.id_for_label }}" class="form-label">Código da Sala</label>
+              <input type="text" class="form-control" id="{{ form.codigo.id_for_label }}" name="{{ form.codigo.name }}" value="{{ codigo }}" readonly>
+          </div>
             <div class="mb-3">
                 <label for="nome" class="form-label">Nome</label>
                 <input type="text" class="form-control" id="nome" name="nome">
