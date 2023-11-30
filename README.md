@@ -17,7 +17,7 @@ Em seguida ative o ambiente em sua maquina.
 Agora instale os dependencias nescessárias:
 
 ```sh
-    pip install -r requeriments.txt
+    pip install -r requeriments
 ```
 
 criarArquivo ```.env``` na raiz do projeto:

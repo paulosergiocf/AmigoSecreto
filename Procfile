@@ -1,2 +1,1 @@
-release: python manage.py migrate
-web: gunicorn setup.wsgi
+web: gunicorn amigoSecreto.wsgi
