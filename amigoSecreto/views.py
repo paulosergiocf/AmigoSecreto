@@ -3,7 +3,7 @@ from django.contrib import messages
 from amigoSecreto.forms import ParticipanteForm
 from amigoSecreto.models import Participante, Sala, SalaSorteio, ResponsavelSala, SalaParticipante
 from django.db.models import F
-
+import os
 def index(request):
     salas = Sala.objects.all()
     return render(request, 'index.html', {'salas': salas})
@@ -40,4 +40,5 @@ def participar(request, codigo):
 
 def criar_sala_sorteio(request):
     
-    return render(request, 'criar-sala.html')
+    #return render(request, 'criar-sala.html')
+    return redirect('https://http.cat/404')
