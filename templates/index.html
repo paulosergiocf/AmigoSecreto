@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="page">
+  <br>
+  <div class="container">
+    <h3><span class="badge bg-secondary">Criar Sala</span></h3>
+    <a href="{% url 'criar_sala_sorteio' %}" class="btn btn-outline-secondary">Criar</a>
+  </div>
+  <br>
+  <div class="container">
+    <h3><span class="badge bg-secondary">Sala</span></h3>
+
+    {% if salas|length == 0 %}
+    <div class="alert alert-warning" role="alert">
+      <p>nenhuma sala cadastrada</p>
+    </div>
+    {% else %}
+    <div class="container">
+      {% for sala in salas %}
+      <div class="row row-cols-2">
+        <div class="col">
+          <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h5 class="card-title">{{sala.codigoSala}}</h5>
+              <a class="btn btn-primary" href="{% url 'sala' codigo=sala.codigoSala %}">Acessar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+
+  {% endblock %}

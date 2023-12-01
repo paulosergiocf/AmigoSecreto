@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="page">
+  <section id="inicio" class="container inicio">
+
+                            
+
+    <div class="container relogio">
+      {% for parametro in parametros %}
+      <span id="dataFutura" style="display: none;">{{ parametro }}</span>
+      {% endfor %}
+      <div class="alert alert-warning" role="alert">
+        <p>Sorteio sera realizado no dia <span class="badge bg-warning text-dark" id="dataFuturaDefinida"></span></p>
+      </div>
+
+      <h3>Contagem Regressiva: <span class="badge bg-secondary" id="contador"></span></h3>
+    </div>
+    <br>
+    {% for parametro in parametros %}
+    <div class="alert alert-info" role="alert">
+      <h5>Valor do presente é de até {{parametro.valorMaximoPresente}} Reais</h5>
+      <p><span class="badge bg-info text-dark" >Respeite os valores pré estipulado!!</span> o combinado não sai caro para ninguem.</p>
+    </div>
+    {% endfor %}
+    <div class="container bt-participar">
+      <a class="btn btn-primary" href="{% url 'participar' codigo=codigo %}">Participar</a>
+    </div>
+    <br>
+    <div class="container participantes">
+      <h3>Lista de participantes</h3>
+      {% if participantes|length == 0 %}
+        <div class="alert alert-warning" role="alert">
+          <p>nenhum participante cadastrado</p>
+        </div>
+      {% else %}
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Nome</th>
+              <th scope="col">Email</th>
+              <th scope="col">Situação</th>
+            </tr>
+          </thead>
+        {% for participante in participantes %}
+          {% if participante.valido %}
+            <tr>
+              <th scope="col">{{participante.nome}}</th>
+              <th scope="col">{{participante.email}}</th>
+              <th class="table-success" scope="col">Aprovado</th>
+            </tr>
+          {% else %}
+            <tr>
+              <th class="table-danger" scope="col">{{participante.nome}}</th>
+              <th class="table-danger" scope="col">{{participante.email}}</th>
+              <th class="table-danger" scope="col">Aguardando aprovação</th>
+            </tr>
+          {% endif %}
+          {% endfor %}
+        {% endif %}
+      
+      </table>
+    </div>
+    </div>
+  </section>
+  <script src="{% static 'js/contador.js' %}" defer></script>
+</div>
+
+{% endblock %}
