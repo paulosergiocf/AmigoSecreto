@@ -5,7 +5,7 @@
 <div class="page">
   <section id="inicio" class="container inicio">
 
-    <a class="nav-link" href="{% url 'participar' codigo=codigo %}">Participar</a>                        
+                            
 
     <div class="container relogio">
       {% for parametro in parametros %}
@@ -24,6 +24,9 @@
       <p><span class="badge bg-info text-dark" >Respeite os valores pré estipulado!!</span> o combinado não sai caro para ninguem.</p>
     </div>
     {% endfor %}
+    <div class="container bt-participar">
+      <a class="btn btn-primary" href="{% url 'participar' codigo=codigo %}">Participar</a>
+    </div>
     <br>
     <div class="container participantes">
       <h3>Lista de participantes</h3>
