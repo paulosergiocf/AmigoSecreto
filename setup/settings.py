@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from posixpath import dirname
 from dotenv import load_dotenv
 import os
 load_dotenv()
@@ -124,14 +125,24 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, 'amigoSecreto/static')
-]
+# STATIC_URL = 'static/'
+# STATICFILES_DIRS = [
+#         os.path.join(BASE_DIR, 'amigoSecreto/static')
+# ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root')
-MEDIA_URL = '/media/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root')
+# MEDIA_URL = '/media/'
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STATIC_URL = '/static/'
+DJANGO_PROJECT = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR = dirname(os.path.dirname(os.path.abspath(__file__)))
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_collected')
+STATICFILES_DIRS = [    
+    os.path.abspath(os.path.join(BASE_DIR, 'amigoSecreto/static/')),
+    os.path.abspath(os.path.join(PROJECT_DIR, 'django/static')),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
