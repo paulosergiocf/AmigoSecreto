@@ -63,6 +63,13 @@ Agora para iniciar a aplicação utilize o comando.
     python manage.py migrate && python manage.py collectstatic --noinput && gunicorn setup.wsgi
 ```
 
+```sh
+
+    gunicorn setup.wsgi:application --log-file=- --log-level=debug
+
+
+```
+
 ## Todo
 
 lista de implementações que ainda precisam ser feitas.
