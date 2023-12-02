@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from amigoSecreto.forms import ParticipanteForm
-from amigoSecreto.models import Participante, Sala, SalaSorteio, ResponsavelSala, SalaParticipante
+from amigoSecreto.models import Participante, Sala, SalaSorteio, SalaParticipante
 from django.db.models import F
-import os
+from django.views.decorators.csrf import csrf_protect
+
 def index(request):
     salas = Sala.objects.all()
     return render(request, 'index.html', {'salas': salas})
@@ -15,7 +16,8 @@ def sala(request, codigo):
     participantes = Participante.objects.filter(salaparticipante__in=salaParticipantes).annotate(valido=F('salaparticipante__valido')).values('nome', 'email', 'valido')
     
     return render(request, 'sala.html', {'codigo':codigo,'participantes':participantes, 'parametros':parametros})
-   
+
+@csrf_protect
 def participar(request, codigo):
     if request.method == 'POST':
         form = ParticipanteForm(request.POST)
