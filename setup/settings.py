@@ -36,8 +36,8 @@ ALLOWED_HOSTS = [
     '*']
 
 CSRF_TRUSTED_ORIGINS = [
-    'amigosecreto-production.up.railway.app',
-    'amigosecreto-production.up.railway.app/*',
+    'https://amigosecreto-production.up.railway.app/',
+    'https://amigosecreto-production.up.railway.app//*',
     ]
 
 CORS_ORIGIN_WHITELIST = [
