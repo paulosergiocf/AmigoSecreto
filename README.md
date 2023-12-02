@@ -52,6 +52,11 @@ Em seguida defina uma senha de superusuario.
 ```sh
     python manage.py createsuperuser
 ```
+Para carregar arquivos staticos como css, js, imagems etc.
+
+```sh
+    python manage.py colletcstatic
+```
 
 Agora para iniciar a aplicação utilize o comando.
 
@@ -59,24 +64,27 @@ Agora para iniciar a aplicação utilize o comando.
     python manage.py runserver
 ```
 > se tiver problemas com os arquivos estaticos rode da seguinte forma: foi nescessário ajustar o settings para ler os arquivos estaticos no servidor usando o gunucorn
-```sh
-    python manage.py migrate && python manage.py collectstatic --noinput && gunicorn setup.wsgi
-```
 
 ```sh
 
     gunicorn setup.wsgi:application --log-file=- --log-level=debug
 
+    python manage.py migrate && python manage.py collectstatic --noinput && gunicorn setup.wsgi:application --preload
 
 ```
 
 ## Todo
 
-lista de implementações que ainda precisam ser feitas.
-
-- [ ] criar script para rodar de maneira agendada, com frequencia de 5 vezes ao dia, lendo todos os parametros agendados, se faltar menos de 5 horas para o sorteio então bloquear a participação de usuarios na sala.
-- [ ] metodo para sortear de maneira agendada com base no parametro estabelecido.
+#### Implementações futuras:
+- [X] resolver probrema erro 403 - Proibido ao preencher formulario.
+- [x] metodo para sortear.
 - [ ] permitir que qualquer pessoa possa criar e gerenciar uma sala.
+- [ ] criar pagina admin da sala.
+- [ ] criar script para rodar de maneira agendada, com frequencia de 5 vezes ao dia, lendo todos os parametros agendados, se faltar menos de 5 horas para o sorteio então bloquear a participação de usuarios na sala.
+
+#### Correção de problemas:
+- [ ] Resolver problema que o mesmo jogador não pode ser inserido suas vezes, deveria poder ser inserido em salas diferentes.
+- [ ] implementar criptografia com bcript na senha do admin de sala.
 
 
 

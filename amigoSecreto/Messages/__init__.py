@@ -1,9 +1,11 @@
 from enum import Enum
 
 class Mensagens(Enum):
-    EMAIL_TESTE = """
-    Olá, ####.
-    Está mensagem é de teste, confirme que recebeu, para sabermos que nenhum problema ocorreu!
+    EMAIL_PENDENTE = """
+    Olá ####, seu pedido de aprovação para participar do 
+    amigo secreto na sala $$$$ está pendente!
+    
+    você pode acompanhar seu status na pagina da sala.
     """
     MENSAGENS_AMIGO_SECRETO = [
         """A baleia-azul é responsável pelo som mais alto do mundo. 
@@ -26,3 +28,5 @@ class Mensagens(Enum):
         """Se ovo veio primeiro que a galinha, ou se a galinha veio primeiro que o ovo, eu não sei. Mas sei que #### de tal é seu amigo secreto, e isso me chocou. """,
         """O aquecimento global ta aí, e todo mundo vai ser assado, então por que não contribuir para esse processo ser mais rápido?  É muito fácil para ajudar, de um presente para #### de tal e veja seu coração aquecer como o planeta, ele vai aquecer tanto que vai morrer de felicidade  :D"""
     ]
+    
+    

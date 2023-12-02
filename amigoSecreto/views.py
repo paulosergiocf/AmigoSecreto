@@ -4,7 +4,9 @@ from amigoSecreto.forms import ParticipanteForm
 from amigoSecreto.models import Participante, Sala, SalaSorteio, SalaParticipante
 from django.db.models import F
 from django.views.decorators.csrf import csrf_protect
-
+from amigoSecreto.usecases.enviar_email import ServidorEmail
+from amigoSecreto.entities.email import Email
+from amigoSecreto.Messages import Mensagens
 def index(request):
     salas = Sala.objects.all()
     return render(request, 'index.html', {'salas': salas})
@@ -29,7 +31,17 @@ def participar(request, codigo):
             novo_participante_sala.save()
             
             messages.success(request, 'Participante adicionado com sucesso!')
-            return redirect('index')  # Redireciona para uma página de sucesso
+            
+            destinatario = participante.email
+            assunto = f"Email - inscrição amigo secreto Sala {codigo}"
+            corpo = Mensagens.EMAIL_PENDENTE.value
+            corpo = corpo.replace("####",participante.nome).replace("$$$$", codigo)
+            
+            email = Email(destinatario,assunto, corpo)
+            serverEmail = ServidorEmail()
+            serverEmail.enviarEmail(email=email)
+            
+            return redirect('sala',codigo)  # Redireciona para uma página de sucesso
         else:
             if not form.is_valid():
                 print(form.errors)
