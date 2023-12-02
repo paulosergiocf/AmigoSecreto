@@ -17,8 +17,7 @@ import os
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-#BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -28,10 +27,25 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+# settings.py
+ALLOWED_HOSTS = [
+    'amigosecreto-production.up.railway.app',
+    'amigosecreto-production.up.railway.app/*', 
+    '*']
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://amigosecreto-production.up.railway.app/',
+    'https://amigosecreto-production.up.railway.app//*',
+    ]
+
+CORS_ORIGIN_WHITELIST = [
+    'amigosecreto-production.up.railway.app',
+    'amigosecreto-production.up.railway.app/*', 
+    ]
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Application definition
 
 INSTALLED_APPS = [
@@ -52,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'setup.urls'
@@ -125,26 +140,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-#-----------statics django runserver---------------
-# STATIC_URL = 'static/'
-# STATICFILES_DIRS = [
-#         os.path.join(BASE_DIR, 'amigoSecreto/static'),
-        
-# ]
-
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root')
-# MEDIA_URL = '/media/'
-
 #-----------statics gnuicorn---------------
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_URL = '/static/'
 DJANGO_PROJECT = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_collected')
 STATICFILES_DIRS = [    
-    os.path.abspath(os.path.join(BASE_DIR, 'amigoSecreto/static/')),
-    os.path.abspath(os.path.join(PROJECT_DIR, 'django/static')),
+    os.path.abspath(os.path.join(BASE_DIR, 'amigoSecreto/static')),
+    os.path.abspath(os.path.join(PROJECT_DIR, 'static')),
 ]
 
 # Default primary key field type
@@ -153,6 +156,6 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-CSRF_USE_REFERER = True
+# CSRF_USE_REFERER = True
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'

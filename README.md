@@ -6,6 +6,8 @@ Projeto criado só para evitar permissões desnecessárias em aplicativos esquis
 
 ## Preparando o ambiente
 
+[![Python 3.11.5](https://img.shields.io/badge/python-3.11.5-red.svg)](https://www.python.org/downloads/release/python-360/)
+
 Para utilizar o projeto crie um ambiente virtual.
 
 ```sh
@@ -59,6 +61,13 @@ Agora para iniciar a aplicação utilize o comando.
 > se tiver problemas com os arquivos estaticos rode da seguinte forma: foi nescessário ajustar o settings para ler os arquivos estaticos no servidor usando o gunucorn
 ```sh
     python manage.py migrate && python manage.py collectstatic --noinput && gunicorn setup.wsgi
+```
+
+```sh
+
+    gunicorn setup.wsgi:application --log-file=- --log-level=debug
+
+
 ```
 
 ## Todo
