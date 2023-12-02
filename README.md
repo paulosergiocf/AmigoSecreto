@@ -6,6 +6,8 @@ Projeto criado só para evitar permissões desnecessárias em aplicativos esquis
 
 ## Preparando o ambiente
 
+[![Python 3.11.5](https://img.shields.io/badge/python-3.11.5-red.svg)](https://www.python.org/downloads/release/python-360/)
+
 Para utilizar o projeto crie um ambiente virtual.
 
 ```sh
