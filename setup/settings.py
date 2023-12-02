@@ -31,7 +31,7 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 DEBUG = False
 
 # settings.py
-ALLOWED_HOSTS = ['amigosecreto-production.up.railway.app', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['amigosecreto-production.up.railway.app', '*']
 
 # Application definition
 
@@ -154,6 +154,6 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-CSRF_USE_REFERER = True
+# CSRF_USE_REFERER = True
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
