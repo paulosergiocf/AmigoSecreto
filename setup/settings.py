@@ -30,8 +30,22 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 DEBUG = False
 
 # settings.py
-ALLOWED_HOSTS = ['amigosecreto-production.up.railway.app', '*']
+ALLOWED_HOSTS = [
+    'https://amigosecreto-production.up.railway.app',
+    'https://amigosecreto-production.up.railway.app/*', 
+    '*']
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://amigosecreto-production.up.railway.app',
+    'https://amigosecreto-production.up.railway.app/*', 
+    '*']
+
+CORS_ORIGIN_WHITELIST = [
+    'https://amigosecreto-production.up.railway.app',
+    'https://amigosecreto-production.up.railway.app/*', 
+    '*']
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Application definition
 
 INSTALLED_APPS = [
