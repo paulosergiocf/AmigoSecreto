@@ -13,12 +13,19 @@
               <input type="text" class="form-control" id="{{ form.codigo.id_for_label }}" name="{{ form.codigo.name }}" value="{{ codigo }}" readonly>
           </div>
             <div class="mb-3">
-                <label for="nome" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="nome" name="nome">
+              <label for="nome" class="form-label">Nome</label>
+              <input type="text" class="form-control" id="nome" name="nome" 
+              placeholder="nome ou apelido, seja livre"
+              minlength="4" maxlength="30"
+              required>
             </div>
             <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email"   
+              placeholder="email@example.com" aria-describedby="emailHelp"
+              minlength="11" maxlength="30"
+              oninput="validateEmail(this)"
+              required>
             </div>
             <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="exampleCheck1" onchange="toggleSubmit()">
@@ -29,6 +36,7 @@
         </div>
     </section>
     <script src="{% static 'js/permitirConfirmar.js' %}" defer></script>
+    <script src="{% static 'js/validarFormularioEntrada.js' %}"></script>
 </div>
   
 {% endblock %}

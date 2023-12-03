@@ -1,10 +1,12 @@
 from django.db import models
+from django.contrib.auth.hashers import make_password, check_password
+from django.contrib import messages
 
 class Participante(models.Model):
     """
     Representa cada participante que sera participara de algum sorteio de amigo secreto.
     """
-    nome = models.CharField(max_length=50)
+    nome = models.CharField(max_length=50, unique=True)
     email = models.EmailField(blank=False, max_length=30, unique=True)
     
     def __str__(self):
@@ -17,7 +19,13 @@ class ResponsavelSala(Participante):
     - Gerenciar parametros.
     - Aprovar participantes.
     """
-    senha = models.CharField(max_length=32)
+    senha = models.CharField(max_length=128)
+    def save(self, *args, **kwargs):
+        self.senha = make_password(self.senha)
+        super().save(*args, **kwargs)
+
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.senha)
     
 class Sala(models.Model):
     """ 

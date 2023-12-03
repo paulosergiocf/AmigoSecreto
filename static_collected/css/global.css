@@ -1,4 +1,7 @@
 
+html, body {
+    height: 100%;
+  }
 .inicio, .participar {
     padding-top: 2rem;
     padding-bottom: 2rem;
@@ -9,3 +12,9 @@
     bottom: 0;
     width: 100%;
 }
+
+input:invalid {
+    background-color: #fde7e7;
+  }
+
+  

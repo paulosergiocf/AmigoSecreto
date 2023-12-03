@@ -29,7 +29,6 @@ class TestServidorEmail(unittest.TestCase):
         with self.assertRaises(smtplib.SMTPAuthenticationError):
             servidor_email.enviarEmail(email)
 
-    # Adicione mais testes conforme necessário
 
 if __name__ == '__main__':
     unittest.main()

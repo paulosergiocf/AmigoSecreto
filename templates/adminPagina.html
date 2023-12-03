@@ -1,14 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block content %}
 
+{% block content %}
 <div class="page">
-  <br>
+  <h2>teste {{usuario}}</h2>
   <div class="container">
-    <h3><span class="badge bg-secondary">Criar Sala</span></h3>
-    <a href="{% url 'criar_sala_sorteio' %}" class="btn btn-outline-secondary">Criar</a>
+    <button type="button" class="btn btn-primary position-relative">
+      Inbox
+      <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+        99+
+        <span class="visually-hidden">notificação</span>
+      </span>
+    </button>
   </div>
-  <br>
+
   <div class="container">
     <h3><span class="badge bg-secondary">Sala</span></h3>
 
@@ -32,6 +37,5 @@
       </div>
       {% endif %}
     </div>
-  </div>
-
-  {% endblock %}
+</div>
+{% endblock %}

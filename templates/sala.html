@@ -10,12 +10,20 @@
     <div class="container relogio">
       {% for parametro in parametros %}
       <span id="dataFutura" style="display: none;">{{ parametro }}</span>
-      {% endfor %}
-      <div class="alert alert-warning" role="alert">
+      <div class="alert aledrt-warning" role="alert">
         <p>Sorteio sera realizado no dia <span class="badge bg-warning text-dark" id="dataFuturaDefinida"></span></p>
       </div>
-
+      {% endfor %}
+      
+      {% if parametros|length == 0%}
+      <div class="alert alert-danger" role="alert">
+        <h5>Atenção</h5>
+        <p>Administrador da sala ainda não definiu os parametros do sorteio.</p>
+      </div>
+      {% else %}
       <h3>Contagem Regressiva: <span class="badge bg-secondary" id="contador"></span></h3>
+      {% endif %}
+      
     </div>
     <br>
     {% for parametro in parametros %}
