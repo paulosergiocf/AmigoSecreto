@@ -22,26 +22,35 @@
                         <div class="navbar-nav">
                             <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Amigo Secreto</a>
                         </div>
-                        
-                        <div class="navbar-nav">
-                            <a class="nav-link active" aria-current="page" href="{% url 'logout' %}">logout</a>
-                        </div>
-                        
-                        <div class="navbar-nav">
-                            <a class="nav-link active" aria-current="page" href="{% url 'login' %}">Login</a>
-                        </div>
-                        
 
+                        <div class="navbar-nav">
+                            {% if user.is_authenticated %}
+                            <div class="btn-group">
+                                <a href="{% url 'adminPagina' %}" 
+                                class="btn btn-primary active" aria-current="page">{{ user.username }}</a>
+                                <a href="{% url 'logout' %}" class="btn btn-primary">Sair</a>
+                            </div>
+                            {% else %}
+                            <div class="navbar-nav">
+                                <a class="nav-link active" aria-current="page" href="{% url 'login' %}">Login</a>
+                            </div>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </nav>
         </section>
         {% if messages %}
         {% for message in messages %}
-        <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-warning{% endif %} alert-dismissible fade show"
-            role="alert">
+        <div class="alert 
+            {% if message.tags == 'success' %}alert-success
+            {% elif message.tags == 'error' %}alert-danger
+            {% else %}alert-warning
+            {% endif %}
+            alert-dismissible fade show" role="alert">
             {{ message }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+
         {% endfor %}
         {% endif %}

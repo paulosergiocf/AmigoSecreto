@@ -1,22 +1,38 @@
+from datetime import date, datetime
 
-import zlib
-
-def Login_usuario(request, usuario):
-    request.session['user_id'] = usuario.id
-
-def logout_usuario(request):
-    if 'user_id' in request.session:
-        del request.session['user_id']
-
-def usuario_esta_autenticado(request):
-    return 'user_id' in request.session
-
-
-def compactarTextoURL(texto):
-    dados_compactados = zlib.compress(texto.encode('utf-8'))
-    return dados_compactados
+def gerarDiagramacao(lista):
+    """
+    Args:
+        lista: de dados.
+    Returns:
+        lista: lista com matriz para prencher tela em tres colunas.
+    """
+    lista_diagramar =list()
+    for resultado in lista:
+        lista_diagramar.append(resultado)
     
-def descompactarTextoURL(texto):
-    dados_descompactados = zlib.decompress(texto).decode('utf-8')
-    return dados_descompactados
-    
+    envelope= list()
+    diagramacao = dict()
+    contador = 1
+    linha = 1
+    for objeto in lista_diagramar:
+        if contador == 1:
+            diagramacao[f"linha{linha}"] = [objeto]
+            contador +=1
+        elif contador == 2:
+            diagramacao[f"linha{linha}"].append(objeto)
+            contador +=1
+        elif contador == 3:
+            diagramacao[f"linha{linha}"].append(objeto)
+            linha += 1
+            contador = 1 
+
+        envelope.append(diagramacao)
+
+    return diagramacao
+
+def formatar(data_obj):
+    data_string = data_obj.strftime('%Y-%m-%d')
+    datalista = data_string.split('-')
+    data = date(int(datalista[0]), int(datalista[1]), int(datalista[2]))
+    return data

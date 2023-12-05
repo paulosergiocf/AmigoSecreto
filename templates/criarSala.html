@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="page">
+  <div class="container">
+
+    <h3>
+      <small class="text-muted">Criar Sala</small>
+    </h3>
+    <form method="post" action="{% url 'criarsala' %}">
+      {% csrf_token %}
+      <div class="container">
+        <div class="mb-3">
+          <label for="nome" class="form-label">Apelido da Sala</label>
+          <input type="text" class="form-control" placeholder="Ex: EscolaXavierParaAlunosSuperDotados" id="codigoSala"
+            name="codigoSala" minlength="4" maxlength="20" required>
+        </div>
+        <div class="mb-3">
+          <label for="date" class="form-label">Data do Sorteio</label>
+          <input type="date" class="form-control" id="dataSorteio" name="dataSorteio" 
+            required>
+        </div>
+        <div class="mb-3">
+          <label for="number" class="form-label">Valor máximo do presente</label>
+          <input type="number" class="form-control" id="valorMaximoPresente" name="valorMaximoPresente" step="0.01"
+            pattern="\d+(\.\d{1,2})?" title="Informe um número com até duas casas decimais" required>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Confirmar</button>
+    </form>
+    <script src="{% static 'js/validarFormularioEntrada.js' %}"></script>
+  </div>
+
+</div>
+
+{% endblock %}

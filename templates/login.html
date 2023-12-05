@@ -10,23 +10,23 @@
       <small class="text-muted">Login</small>
     </h3>
     <p>
-      <span class="text-muted">não tem cadastro?</span><a href="{% url 'criar_sala_sorteio' %}">CriarSala</a></span>
+      <span class="text-muted">não tem cadastro?</span><a href="{% url 'cadastrar' %}">Cadastrar</a></span>
     </p>
     <form method="post" action="{% url 'login' %}">
       {% csrf_token %}
       <div class="container">
         <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <input type="email" class="form-control" id="email" name="email"   
-          placeholder="email@example.com" aria-describedby="emailHelp"
-          minlength="11" maxlength="30"
+          <label for="nome" class="form-label">Nome</label>
+          <input type="text" class="form-control" id="nome" name="nome" 
+          placeholder="nome ou apelido, seja livre"
+          minlength="4" maxlength="30"
           required>
         </div>
         <div class="mb-3">
           <label for="password" class="form-label">Senha</label>
           <input type="password" class="form-control" id="senha" name="senha" 
           placeholder="utilize Letras, numeros e caracteres especiais" aria-describedby="passwordHelp"
-          minlength="8" maxlength="32"
+          minlength="6" maxlength="32"
           required>
         </div>
       </div>

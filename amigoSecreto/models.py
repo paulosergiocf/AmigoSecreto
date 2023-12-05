@@ -1,6 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.hashers import make_password, check_password
-from django.contrib import messages
+
 
 class Participante(models.Model):
     """
@@ -13,25 +14,27 @@ class Participante(models.Model):
         return self.nome
     
 
-class ResponsavelSala(Participante):
+class ResponsavelSala(AbstractUser):
     """
-    Criador da sala que ficará responsavel por:
-    - Gerenciar parametros.
+    Criador da sala que ficará responsável por:
+    - Gerenciar parâmetros.
     - Aprovar participantes.
     """
-    senha = models.CharField(max_length=128)
+    username = models.CharField(max_length=50, unique=True)
+    email = models.EmailField(blank=False, max_length=30, unique=True)
+    
     def save(self, *args, **kwargs):
-        self.senha = make_password(self.senha)
+        self.password = make_password(self.password)
         super().save(*args, **kwargs)
 
     def check_password(self, raw_password):
-        return check_password(raw_password, self.senha)
+        return check_password(raw_password, self.password)
     
 class Sala(models.Model):
     """ 
     Cria uma sala
     """
-    codigoSala = models.CharField(max_length=20)
+    codigoSala = models.CharField(max_length=20, unique=True)
     responsavelSala = models.ForeignKey(ResponsavelSala, on_delete=models.CASCADE)
     
     def __str__(self):
@@ -51,7 +54,7 @@ class SalaParticipante(models.Model):
 class SalaSorteio(models.Model):
     """ Parametros para funcionamento da sala
     """
-    codigoSala = models.ForeignKey(Sala, on_delete=models.CASCADE)
+    codigoSala = models.ForeignKey(Sala, on_delete=models.CASCADE, unique=True)
     dataSorteio = models.DateField()
     valorMaximoPresente = models.FloatField(default=0.0)
     situacao = models.BooleanField(default=True)
