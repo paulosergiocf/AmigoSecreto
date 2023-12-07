@@ -4,9 +4,14 @@
 {% block content %}
 <div class="page">
   <section id="inicio" class="container inicio">
-
-                            
-
+    {% if user.is_authenticated and usuariologado == responsavel %}
+      <div class="jumbotron">
+        <h1 class="display-4">Sortear</h1>
+        <p class="lead">
+          <a type="button" class="btn btn-success" href="{% url 'sortear' codigo=codigo %}"">Sortear</a>
+        </p>
+      </div>
+    {% endif %}
     <div class="container relogio">
       {% for parametro in parametros %}
       <span id="dataFutura" style="display: none;">{{ parametro }}</span>

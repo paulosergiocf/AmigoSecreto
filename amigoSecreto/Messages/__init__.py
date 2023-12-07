@@ -7,6 +7,8 @@ class Mensagens(Enum):
     
     você pode acompanhar seu status na pagina da sala.
     """
+    LOGIN_CRIAR_SALAS = "É necessário fazer o login para criar salas."
+    CRIACAO_RESPONSAVEL = "Parabens ####, agora pode fazer login em sua conta e criar suas próprias salas."
     MENSAGENS_AMIGO_SECRETO = [
         """A baleia-azul é responsável pelo som mais alto do mundo. 
         Sua voz pode ser ouvida até 800 km de distância. Ela só não ganha do seu amigo secreto #### gritando quando ganha algo que não gosta.""",

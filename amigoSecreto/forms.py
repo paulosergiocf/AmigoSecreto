@@ -20,19 +20,20 @@ class ParticipanteForm(forms.ModelForm):
         email = self.cleaned_data['email']
         email = email.lower()
 
-        servidores = ['@gmail', '@proton.me','@protonmail', '@hotmail', '@outlook', '@yahoo']
+        servidores = ['@gmail', '@protonme','@protonmail', '@hotmail', '@outlook', '@yahoo']
         if not any(servidor in email for servidor in servidores):
             raise ValidationError('O e-mail deve ter um dos seguintes domínios: @gmail, @proton.me, @protonmail, @hotmail, @outlook, @yahoo.')
-
+        
 
         return email
+    
     
     def clean_nome(self):
         """
         Formata nome recebido para salvar como a primeira letra maiuscula no banco de dados.
         """
-        nome = self.cleaned_data['nome']
-        nome = nome.title()
+        nome = f"{self.cleaned_data['nome']}"
+        nome = nome.lower()
         
         return nome
     
@@ -46,6 +47,15 @@ class ResponsavelSalaForm(forms.ModelForm):
         email = self.cleaned_data['email']
         return validarEmail(email)
     
+    def clean_nome(self):
+        """
+        Formata nome recebido para salvar como a primeira letra maiuscula no banco de dados.
+        """
+        username = f"{self.cleaned_data['username']}"
+        username = username.lower()
+        
+        return username
+    
 class SalaForm(forms.ModelForm):
     class Meta:
         model = Sala
@@ -56,7 +66,7 @@ class SalaSorteioForm(forms.ModelForm):
     class Meta:
         model = SalaSorteio
         fields = ['codigoSala', 'dataSorteio', 'valorMaximoPresente', 'situacao']
-    
+        
     
     
 class SalaForm(forms.ModelForm):

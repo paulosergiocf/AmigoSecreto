@@ -1,5 +1,5 @@
 from django.urls import path
-from amigoSecreto.views import index, participar, sala, efetuarlogin, adminPagina,efetuarlogout, criarResponsavelSala, criarSala, aprovarParticipante
+from amigoSecreto.views import index, participar, sala, efetuarlogin, adminPagina,efetuarlogout, criarResponsavelSala, criarSala, aprovarParticipante, sortear
 
 urlpatterns = [
     path('', index, name='index'),
@@ -11,4 +11,5 @@ urlpatterns = [
     path('adminPagina/', adminPagina, name='adminPagina'),
     path('adminPagina/criarsala', criarSala, name='criarsala'),
     path('adminPagina/<str:codigo>/aprovarParticipante/<str:participante>/', aprovarParticipante, name='aprovarParticipante'),
+    path('adminPagina/<str:codigo>/sortear/', sortear, name='sortear'),
 ]

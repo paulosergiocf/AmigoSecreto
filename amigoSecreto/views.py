@@ -5,11 +5,10 @@ from django.contrib import messages
 from django.db.models import F
 from django.contrib.auth import logout, authenticate, login
 from amigoSecreto.models import Participante, ResponsavelSala, Sala, SalaSorteio, SalaParticipante
-from amigoSecreto.usecases.enviar_email import ServidorEmail
-from amigoSecreto.forms import ParticipanteForm, ResponsavelSalaForm, SalaForm, SalaSorteioForm
-from amigoSecreto.entities.email import Email
+from amigoSecreto.forms import ParticipanteForm, ResponsavelSalaForm, SalaForm, SalaSorteioForm, validarEmail
 from amigoSecreto.Messages import Mensagens
 from amigoSecreto.usecases.utils import gerarDiagramacao
+from amigoSecreto.usecases.regras import adicionarParticipanteSala, emailParticipanteCadastrado, adicionarParticipanteResponsavelSala, emailParticipanteResponsavelCadastrado
 
 # Paginas publicas
 def index(request):
@@ -45,64 +44,96 @@ def sala(request, codigo):
 # Formulários
 @csrf_protect
 def participar(request, codigo):
+    participante = None
     if request.method == 'POST':
         form = ParticipanteForm(request.POST)
+        sala = Sala.objects.get(codigoSala=codigo)
+        email = validarEmail(request.POST.get('email'))
         if form.is_valid():
-            participante = form.save() 
-            sala = Sala.objects.get(codigoSala=codigo)
-            participante = Participante.objects.get(email=participante.email)
-            novo_participante_sala = SalaParticipante(codigoSala=sala, email=participante, valido=False)
-            novo_participante_sala.save()
+            participante_existente = Participante.objects.filter(email=email).exists()
+            if participante_existente:
+                participante = Participante.objects.filter(email=request.POST.get('email'))
             
-            messages.success(request, 'Participante adicionado com sucesso!')
+            else:
+                participante = form.save()
+                
             
-            destinatario = participante.email
-            assunto = f"Email - inscrição amigo secreto Sala {codigo}"
-            corpo = Mensagens.EMAIL_PENDENTE.value
-            corpo = corpo.replace("####",participante.nome).replace("$$$$", codigo)
+            retorno, mensagem = adicionarParticipanteSala(participante.nome, participante.email, sala)
             
-            email = Email(destinatario,assunto, corpo)
-            serverEmail = ServidorEmail()
-            serverEmail.enviarEmail(email=email)
-            
+            messages.success(request, 'Participante adicionado com sucesso!') if retorno else messages.error(request, mensagem)
+                
+            if retorno:
+                retornoEmail, mensagemEmail = emailParticipanteCadastrado(participante, codigo)
+                messages.success(request, mensagemEmail) if retornoEmail else messages.error(request, mensagemEmail)
+                
             return redirect('sala',codigo)
+        
+            
         else:
             messages.warning(request, 'Digite e confira dos dados com atenção')
+            
+            
+        
     else:
         form = ParticipanteForm(initial={'codigo': codigo})
+        
+        
     return render(request, 'participar.html', {'codigo':codigo, 'form': form})
 
 @csrf_protect
 def criarSala(request):
-    messages.error(request, "Pagina não funcional ainda, por favor aguarde.")
     if not request.user.is_authenticated:
-        messages.error(request, 'É necessário fazer o login para criar salas.' )
+        messages.error(request, Mensagens.LOGIN_CRIAR_SALAS.value )
         return redirect('login')
-    
+ 
     codigo = request.POST.get('codigoSala')
+    data = request.POST.get('dataSorteio')
+    valor = request.POST.get('valorMaximoPresente')
+    
     if request.method == 'POST':
         try:
             responsavel = ResponsavelSala.objects.get(username=request.user)
             formSala = SalaForm({'codigoSala':codigo, 'responsavelSala':responsavel})
-        
-            formSalaSorteio = SalaSorteioForm(request.POST)
-            if formSala.is_valid() and formSalaSorteio.is_valid():
+            
+            criacaoSala = False
+            criacaoParametros = False
+            
+            if formSala.is_valid():
                 formSala.save()
-                formSalaSorteio.save()
-                messages.success(request, 'Sala e Parametros criados com sucesso!')
-                
+                criacaoSala = True
+            
             else:
-                messages.error(request, "Formulário inválido!")
+                messages.error(request, "Código de Sala inválida.")
+                
+            sala = Sala.objects.get(codigoSala=codigo)
+            
+            formSalaSorteio = SalaSorteioForm({
+                'codigoSala':sala,
+                'dataSorteio':data,
+                'valorMaximoPresente':valor,
+                'situacao':True})
+                
+            if formSalaSorteio.is_valid() and criacaoSala:
+                formSalaSorteio.save()
+                criacaoParametros = True
+
+            else:
+                messages.error(request, "Parametros de Sorteio inválidos, definaos novamente!")
+            
+            if criacaoSala and criacaoParametros:
+                retorno, mensagem = adicionarParticipanteResponsavelSala(responsavel, sala)
+                messages.success(request, 'Participante adicionado com sucesso!') if retorno else messages.error(request, mensagem)
             
         except Exception as erro:
             messages.error(request, erro)
+        else:
+            messages.success(request, 'Sala e Parametros criados com sucesso!')
     
     return render(request, 'criarSala.html')
 
-
 def aprovarParticipante(request, codigo, participante):
     if not request.user.is_authenticated:
-        messages.error(request, 'É necessário fazer o login para aprovar participante.' )
+        messages.error(request, Mensagens.LOGIN_CRIAR_SALAS.value)
         return redirect('login')
     
     sala_participante = SalaParticipante.objects.get(codigoSala__codigoSala=codigo, email__email=participante)
@@ -123,18 +154,10 @@ def criarResponsavelSala(request):
                     responsavelSala.save()
                     messages.success(request, 'Responsavel e Sala criados com sucesso')
                     
-                    destinatario = responsavelSala.email
-                    assunto = f"Criação de conta"
-                    corpo = f"{responsavelSala.username} sua conta foi criada com sucesso!"
-                    
-                    email = Email(destinatario,assunto, corpo)
-                    serverEmail = ServidorEmail()
-                    serverEmail.enviarEmail(email=email)
+                    emailParticipanteResponsavelCadastrado(responsavelSala);
                     
                     return redirect('login')
-                
-
-                
+                        
             else:
                 messages.warning(request, 'Digite e confira dos dados com atenção')
         except Exception as erro:
@@ -144,36 +167,53 @@ def criarResponsavelSala(request):
     return render(request, 'criarResponsavel.html')
 
 def adminPagina(request):
-    
     if not request.user.is_authenticated:
-        messages.error(request, 'É necessário fazer o login para acessar a pagina de admin.' )
+        messages.error(request, Mensagens.LOGIN_CRIAR_SALAS.value )
         return redirect('login')
     
     responsavel = ResponsavelSala.objects.get(username=request.user)
     salas = Sala.objects.filter(responsavelSala=responsavel)
     diagramacao = gerarDiagramacao(salas)
     return render(request, 'adminPagina.html', {'diagramacao':diagramacao})
-    
-    
-    
+
+def sortear(request, codigo):
+    if not request.user.is_authenticated:
+        messages.error(request, Mensagens.LOGIN_CRIAR_SALAS.value )
+        return redirect('login')
+    messages.error(request, "Funcionalidade em implementação, aguarde!")
+    salaParticipantes = SalaParticipante.objects.filter(codigoSala__codigoSala=codigo)
+    return redirect('sala', codigo=codigo)
+
 # Gerenciar acessos
 @csrf_protect
 def efetuarlogin(request):
     if request.method == 'POST':
-        nome = request.POST.get('nome')
+        username = request.POST.get('username', None).lower()
         senha = request.POST.get('senha')
+        
         try:
-            usuario = authenticate(request, username=nome, password=senha)
+            usuario = authenticate(request, username=username, password=senha)
+            print(usuario)
             if usuario is not None:
                 login(request, usuario)
                 return redirect('adminPagina')
             else:
                 messages.warning(request, "Credenciais inválidas.")
+        except AuthenticationFailed as auth_failed:
+            messages.warning(request, str(auth_failed))
+            # Adicione logs para depuração
+            # logger.error(f"Authentication failed: {auth_failed}")
         except Exception as erro:
-            messages.warning(request, erro)
+            messages.warning(request, str(erro))
+            # Adicione logs para depuração
+            # logger.error(f"An unexpected error occurred: {erro}")
+        finally:
+            senha = email = None
+            
     return render(request, 'login.html')
 
 def efetuarlogout(request):
     """ Deslogar da página """
     logout(request)
     return redirect('login')
+
