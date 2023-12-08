@@ -8,7 +8,7 @@ class Participante(models.Model):
     Representa cada participante que sera participara de algum sorteio de amigo secreto.
     """
     nome = models.CharField(max_length=50, unique=True)
-    email = models.EmailField(blank=False, max_length=30, unique=True)
+    email = models.EmailField(blank=False, max_length=320, unique=True)
     
     def __str__(self):
         return self.nome
@@ -21,7 +21,7 @@ class ResponsavelSala(AbstractUser):
     - Aprovar participantes.
     """
     username = models.CharField(max_length=50, unique=True)
-    email = models.EmailField(blank=False, max_length=30, unique=True)
+    email = models.EmailField(blank=False, max_length=320, unique=True)
     
     def save(self, *args, **kwargs):
         self.password = make_password(self.password)
