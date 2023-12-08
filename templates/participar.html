@@ -25,8 +25,7 @@
               <input type="email" class="form-control" id="email" name="email"
                   placeholder="email@example.com" aria-describedby="emailHelp"
                   minlength="11" maxlength="30"
-                  pattern="^[a-zA-Z0-9._%+-]+@(gmail\.com|proton\.me|protonmail\.com|hotmail\.com|outlook\.com|yahoo\.com)$"
-                  title="Digite um endereço de e-mail válido e com um dos seguintes domínios: @gmail, @proton.me, @protonmail, @hotmail, @outlook, @yahoo"
+                  oninput="validateEmail(this)"
                   required>
             </div>
           
