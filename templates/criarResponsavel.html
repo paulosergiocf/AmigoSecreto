@@ -24,16 +24,15 @@
           <input type="email" class="form-control" id="email" name="email"
               placeholder="email@example.com" aria-describedby="emailHelp"
               minlength="11" maxlength="30"
-              pattern="^[a-zA-Z0-9._%+-]+@(gmail\.com|proton\.me|protonmail\.com|hotmail\.com|outlook\.com|yahoo\.com)$"
-              title="Digite um endereço de e-mail válido e com um dos seguintes domínios: @gmail, @proton.me, @protonmail, @hotmail, @outlook, @yahoo."
+              oninput="validateEmail(this)"
               required>
         </div>
     
         <div class="mb-3">
           <label for="senha" class="form-label">Senha</label>
           <input type="password" class="form-control" id="password" name="password"
-                 pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_+=])[A-Za-z\d!@#$%^&*()-_+=]{6,}$"
-                 minlength="6" required>
+                 
+                 minlength="8" required>
       </div>
       
       <div class="mb-3">
