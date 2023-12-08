@@ -1,8 +1,9 @@
 {% load static %}
 
-    <div class="bg-dark text-white text-center" style="padding: 2rem;">
- 
-        <span><img src="{% static '/assets/logo/logo.svg' %}" alt="Logo" width="50"  class="img-fluid "></span>
-        <small> &#127279;Paulo Sergio de Campos Filho.</small>
-        <span class="badge text-bg-light">{{ version }}</span>
-    </div>
+    <footer class="fluid fixed-bottom bg-dark text-white text-center" style="padding: 2rem;">
+        <div class="container">
+            <span><img src="{% static '/assets/logo/logo.svg' %}" alt="Logo" width="50"  class="img-fluid "></span>
+            <small> &#127279;Paulo Sergio de Campos Filho.</small>
+            <span class="badge text-bg-light">{{ version }}</span>
+        </div>
+    </footer>

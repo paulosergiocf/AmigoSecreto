@@ -1,17 +1,18 @@
-
-.page {
-    height: 100%;
+@media (max-height: 750px) {
+  footer {
+    display: none;
+  }
+}
+#page {
+    height: 100%; 
+    min-height: 100%; 
   }
 .inicio, .participar, .sala {
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
 
-.footer {
-  padding: 20px;
-  text-align: center;
-  display: inline-flex;
-  bottom: 0;
+#footer {
   width: 100%;
 }
 
