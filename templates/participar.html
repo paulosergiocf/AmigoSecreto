@@ -15,18 +15,21 @@
             <div class="mb-3">
               <label for="nome" class="form-label">Nome</label>
               <input type="text" class="form-control" id="nome" name="nome" 
-              placeholder="nome ou apelido, seja livre"
+              placeholder="apenas letras, números e traços em um nome de usuário"
               minlength="4" maxlength="30"
+              oninput="validarNomeUsuario(this)"
               required>
             </div>
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
-              <input type="email" class="form-control" id="email" name="email"   
-              placeholder="email@example.com" aria-describedby="emailHelp"
-              minlength="11" maxlength="30"
-              oninput="validateEmail(this)"
-              required>
+              <input type="email" class="form-control" id="email" name="email"
+                  placeholder="email@example.com" aria-describedby="emailHelp"
+                  minlength="11" maxlength="30"
+                  pattern="^[a-zA-Z0-9._%+-]+@(gmail\.com|proton\.me|protonmail\.com|hotmail\.com|outlook\.com|yahoo\.com)$"
+                  title="Digite um endereço de e-mail válido e com um dos seguintes domínios: @gmail, @proton.me, @protonmail, @hotmail, @outlook, @yahoo"
+                  required>
             </div>
+          
             <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="exampleCheck1" onchange="toggleSubmit()">
                 <label class="form-check-label" for="exampleCheck1">Confirmo que minhas informações estão corretas</label>
