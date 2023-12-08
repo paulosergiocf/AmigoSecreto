@@ -5,19 +5,21 @@ from django.contrib import messages
 from django.db.models import F
 from django.contrib.auth import logout, authenticate, login
 from amigoSecreto.models import Participante, ResponsavelSala, Sala, SalaSorteio, SalaParticipante
-from amigoSecreto.forms import ParticipanteForm, ResponsavelSalaForm, SalaForm, SalaSorteioForm, validarEmail
+from amigoSecreto.forms import ParticipanteForm, ResponsavelSalaForm, SalaForm, SalaSorteioForm
 from amigoSecreto.Messages import Mensagens
 from amigoSecreto.usecases.utils import gerarDiagramacao
 from amigoSecreto.usecases.regras import adicionarParticipanteSala, emailParticipanteCadastrado, adicionarParticipanteResponsavelSala, emailParticipanteResponsavelCadastrado
+from amigoSecreto.usecases.sortear import executarSorteio
 
-# Paginas publicas
+# ---------------- Paginas publicas-------------------
 def index(request):
     """
     Busca todas as salas no banco de dados e cria um meno na pagina inicial para elas.
     """
+    version = Mensagens.VERSION.value
     salas = Sala.objects.all()
     diagramacao = gerarDiagramacao(salas)
-    return render(request, 'index.html', {'diagramacao': diagramacao})
+    return render(request, 'index.html', {'version':version,'diagramacao': diagramacao})
 
 def sala(request, codigo):
     """
@@ -29,6 +31,7 @@ def sala(request, codigo):
     Recebe o código da sala, pega os parametros, 
     participantes no banco de dados e renderiza na tela as informações
     """
+    version = Mensagens.VERSION.value
     
     parametros = SalaSorteio.objects.filter(codigoSala__codigoSala=codigo)
     salaParticipantes = SalaParticipante.objects.filter(codigoSala__codigoSala=codigo)
@@ -39,16 +42,18 @@ def sala(request, codigo):
     if request.user.is_authenticated:
         usuariologado = ResponsavelSala.objects.get(username=request.user)
         
-    return render(request, 'sala.html', {'codigo':codigo,'participantes':participantes, 'parametros':parametros,'usuariologado':usuariologado, 'responsavel':responsavel})
+    return render(request, 'sala.html', {'version':version,'codigo':codigo,'participantes':participantes, 'parametros':parametros,'usuariologado':usuariologado, 'responsavel':responsavel})
 
 # Formulários
 @csrf_protect
 def participar(request, codigo):
+    version = Mensagens.VERSION.value
     participante = None
     if request.method == 'POST':
         form = ParticipanteForm(request.POST)
         sala = Sala.objects.get(codigoSala=codigo)
-        email = validarEmail(request.POST.get('email'))
+        email = request.POST.get('email')
+        email = email.lower()
         if form.is_valid():
             participante_existente = Participante.objects.filter(email=email).exists()
             if participante_existente:
@@ -78,14 +83,15 @@ def participar(request, codigo):
         form = ParticipanteForm(initial={'codigo': codigo})
         
         
-    return render(request, 'participar.html', {'codigo':codigo, 'form': form})
+    return render(request, 'participar.html', {'version':version,'codigo':codigo, 'form': form})
 
 @csrf_protect
 def criarSala(request):
     if not request.user.is_authenticated:
         messages.error(request, Mensagens.LOGIN_CRIAR_SALAS.value )
         return redirect('login')
- 
+    
+    version = Mensagens.VERSION.value
     codigo = request.POST.get('codigoSala')
     data = request.POST.get('dataSorteio')
     valor = request.POST.get('valorMaximoPresente')
@@ -118,25 +124,26 @@ def criarSala(request):
                 criacaoParametros = True
 
             else:
-                messages.error(request, "Parametros de Sorteio inválidos, definaos novamente!")
+                messages.error(request, "Parametros de Sorteio inválidos, defina-os novamente!")
             
             if criacaoSala and criacaoParametros:
                 retorno, mensagem = adicionarParticipanteResponsavelSala(responsavel, sala)
-                messages.success(request, 'Participante adicionado com sucesso!') if retorno else messages.error(request, mensagem)
+                messages.success(request, 'você foi adicionado como participante!') if retorno else messages.error(request, mensagem)
             
         except Exception as erro:
             messages.error(request, erro)
         else:
-            messages.success(request, 'Sala e Parametros criados com sucesso!')
+            messages.success(request, 'Sala eParametros criados com sucesso!')
+            return redirect('sala', codigo=codigo)
     
-    return render(request, 'criarSala.html')
+    return render(request, 'criarSala.html', {'version':version})
 
 def aprovarParticipante(request, codigo, participante):
     if not request.user.is_authenticated:
         messages.error(request, Mensagens.LOGIN_CRIAR_SALAS.value)
         return redirect('login')
-    
-    sala_participante = SalaParticipante.objects.get(codigoSala__codigoSala=codigo, email__email=participante)
+    version = Mensagens.VERSION.value
+    sala_participante = SalaParticipante.objects.get(codigoSala__codigoSala=codigo, participante__email=participante)
     sala_participante.valido = True
     sala_participante.save()
     return redirect('sala', codigo=codigo)
@@ -147,12 +154,13 @@ def criarResponsavelSala(request):
     Cria um ResponsavelSala com base nos parâmetros fornecidos.
     Retorna a instância do ResponsavelSala criada.
     """
+    version = Mensagens.VERSION.value
     if request.method == 'POST':
         try:
             responsavelSala = ResponsavelSalaForm(request.POST)
             if responsavelSala.is_valid():
                     responsavelSala.save()
-                    messages.success(request, 'Responsavel e Sala criados com sucesso')
+                    messages.success(request, 'Responsavel criado com sucesso, faça login para continuar')
                     
                     emailParticipanteResponsavelCadastrado(responsavelSala);
                     
@@ -164,29 +172,45 @@ def criarResponsavelSala(request):
                 messages.warning(request, erro)
     else:
         form = ResponsavelSalaForm()
-    return render(request, 'criarResponsavel.html')
+    return render(request, 'criarResponsavel.html',{'version':version})
 
 def adminPagina(request):
     if not request.user.is_authenticated:
-        messages.error(request, Mensagens.LOGIN_CRIAR_SALAS.value )
+        messages.error(request, Mensagens.LOGIN_CRIAR_SALAS.value)
         return redirect('login')
+    version = Mensagens.VERSION.value
     
     responsavel = ResponsavelSala.objects.get(username=request.user)
     salas = Sala.objects.filter(responsavelSala=responsavel)
     diagramacao = gerarDiagramacao(salas)
-    return render(request, 'adminPagina.html', {'diagramacao':diagramacao})
+    return render(request, 'adminPagina.html', {'version':version,'diagramacao':diagramacao})
 
 def sortear(request, codigo):
     if not request.user.is_authenticated:
         messages.error(request, Mensagens.LOGIN_CRIAR_SALAS.value )
         return redirect('login')
-    messages.error(request, "Funcionalidade em implementação, aguarde!")
-    salaParticipantes = SalaParticipante.objects.filter(codigoSala__codigoSala=codigo)
+    
+    version = Mensagens.VERSION.value
+    
+    responsavel = ResponsavelSala.objects.get(username=request.user)
+    
+    participantes = Participante.objects.filter(
+        salaparticipante__codigoSala__codigoSala=codigo,
+        salaparticipante__valido=True
+    )
+    sala = Sala.objects.get(codigoSala=codigo)
+    if responsavel == sala.responsavelSala:
+        retorno = executarSorteio(participantes)        
+        messages.success(request, "Sorteio conclúido com sucesso") if retorno else messages.error(request, retorno)
+    else:
+        messages.error(request, "Somente o responsavel da sala pode efetuar o sorteio!")
+    
     return redirect('sala', codigo=codigo)
 
 # Gerenciar acessos
 @csrf_protect
 def efetuarlogin(request):
+    version = Mensagens.VERSION.value
     if request.method == 'POST':
         username = request.POST.get('username', None).lower()
         senha = request.POST.get('senha')
@@ -210,7 +234,7 @@ def efetuarlogin(request):
         finally:
             senha = email = None
             
-    return render(request, 'login.html')
+    return render(request, 'login.html',{'version':version})
 
 def efetuarlogout(request):
     """ Deslogar da página """

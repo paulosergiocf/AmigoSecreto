@@ -44,12 +44,12 @@ class SalaParticipante(models.Model):
     """
     Vincula um participante a uma sala.
     """
-    codigoSala = models.ForeignKey(Sala, on_delete=models.CASCADE)
-    email = models.ForeignKey(Participante, on_delete=models.CASCADE)
+    codigoSala = models.ForeignKey(Sala, on_delete=models.CASCADE, unique=False)
+    participante = models.ForeignKey(Participante, on_delete=models.CASCADE, unique=False)
     valido = models.BooleanField(default=False)
     
     def __str__(self):
-        return f"{self.codigoSala}|{self.email}|{self.valido}"
+        return f"{self.participante}"
 
 class SalaSorteio(models.Model):
     """ Parametros para funcionamento da sala
