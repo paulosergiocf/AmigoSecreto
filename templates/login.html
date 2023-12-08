@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="page">
+  <div class="container">
+    
+    <br>
+    <h3>
+      <small class="text-muted">Login</small>
+    </h3>
+    <p>
+      <span class="text-muted">não tem cadastro?</span><a href="{% url 'cadastrar' %}">Cadastrar</a></span>
+    </p>
+    <form method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+      <div class="container">
+        <div class="mb-3">
+          <label for="nome" class="form-label">Nome</label>
+          <input type="text" class="form-control" id="username" name="username" 
+          minlength="4" maxlength="30"
+          required>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Senha</label>
+          <input type="password" class="form-control" id="senha" name="senha" aria-describedby="passwordHelp"
+          minlength="6" maxlength="32"
+          required>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Confirmar</button>
+    </form>
+    <script src="{% static 'js/validarFormularioEntrada.js' %}"></script>
+  </div>
+
+</div>
+
+{% endblock %}

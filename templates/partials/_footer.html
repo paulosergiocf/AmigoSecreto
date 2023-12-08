@@ -1,6 +1,9 @@
 {% load static %}
-    {% comment %} <footer class="footer bg-dark text-white text-center py-3"> {% endcomment %}
-    <footer class="footer d-none d-md-block bg-dark text-white text-center py-3 ">
-        <img src="{% static '/assets/logo/logo.svg' %}" alt="Logo" width="50"  class="d-inline-block align-text-top">
-        <p class="rodape-texto">&#127279;Paulo Sergio de Campos Filho.</p>
+
+    <footer class="fluid fixed-bottom bg-dark text-white text-center" style="padding: 2rem;">
+        <div class="container">
+            <span><img src="{% static '/assets/logo/logo.svg' %}" alt="Logo" width="50"  class="img-fluid "></span>
+            <small> &#127279;Paulo Sergio de Campos Filho.</small>
+            <span class="badge text-bg-light">{{ version }}</span>
+        </div>
     </footer>

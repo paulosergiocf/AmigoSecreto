@@ -3,7 +3,24 @@
 
 {% block content %}
 <div class="page">.
-
+    <div class="container">
+        <hr>
+        <h4>Configurações da sala</h4>
+        <div class="mb-3">
+          <label for="nome" class="form-label">Apelido da Sala</label>
+          <input type="text" class="form-control" 
+          placeholder="Ex: EscolaXavierParaAlunosSuperDotados"
+          id="codigo" name="codigo">
+        </div>
+        <div class="mb-3">
+          <label for="nome" class="form-label">Data sorteio</label>
+          <input type="date" class="form-control" id="codigo" name="codigo">
+        </div>
+        <div class="mb-3">
+          <label for="nome" class="form-label">Vamor maximo</label>
+          <input type="number" step="0.01" class="form-control" id="valor" name="valor">
+        </div>
+      </div>
 
 </div>
 {% endblock %}

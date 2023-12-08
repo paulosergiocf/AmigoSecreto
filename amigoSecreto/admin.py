@@ -1,7 +1,6 @@
 from django.contrib import admin
-from amigoSecreto.models import Participante, SalaSorteio, ResponsavelSala, Sala, SalaParticipante
+from amigoSecreto.models import Participante, ResponsavelSala, SalaSorteio, Sala, SalaParticipante
 
-# Register your models here.
 class Participantes(admin.ModelAdmin):
     list_display = ('id','nome','email')
     list_display_links = ('id', 'nome')
@@ -11,9 +10,9 @@ class Participantes(admin.ModelAdmin):
 admin.site.register(Participante, Participantes)
 
 class ResponsaveisSala(admin.ModelAdmin):
-    list_display = ('id','nome','email','senha')
-    list_display_links = ('id', 'nome')
-    search_fields = ('nome',)
+    list_display = ('id','username','email','password')
+    list_display_links = ('id', 'username')
+    search_fields = ('username',)
     list_per_page = 20
     
 admin.site.register(ResponsavelSala, ResponsaveisSala)
@@ -31,7 +30,7 @@ class Salas(admin.ModelAdmin):
 admin.site.register(Sala, Salas)
 
 class SalasParticipantes(admin.ModelAdmin):
-    list_display = ('id','codigoSala','email','valido')
+    list_display = ('id','codigoSala','participante','valido')
     list_display_links = ('id', )
 
 admin.site.register(SalaParticipante, SalasParticipantes)

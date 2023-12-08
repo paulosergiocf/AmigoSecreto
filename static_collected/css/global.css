@@ -1,11 +1,25 @@
-
-.inicio, .participar {
+@media (max-height: 750px) {
+  footer {
+    display: none;
+  }
+}
+#page {
+    height: 100%; 
+    min-height: 100%; 
+  }
+.inicio, .participar, .sala {
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
 
-.footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+#footer {
+  width: 100%;
 }
+
+
+
+input:invalid {
+    background-color: #fde7e7;
+  }
+
+  

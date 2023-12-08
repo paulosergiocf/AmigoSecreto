@@ -3,19 +3,32 @@
 
 {% block content %}
 <div class="page">
-  <section id="inicio" class="container inicio">
-
-                            
-
+  <section id="sala" class="container sala">
+    {% if user.is_authenticated and usuariologado == responsavel %}
+      <div class="jumbotron">
+        <h1 class="display-4">Sortear</h1>
+        <p class="lead">
+          <a type="button" class="btn btn-success" href="{% url 'sortear' codigo=codigo %}"">Sortear</a>
+        </p>
+      </div>
+    {% endif %}
     <div class="container relogio">
       {% for parametro in parametros %}
       <span id="dataFutura" style="display: none;">{{ parametro }}</span>
-      {% endfor %}
-      <div class="alert alert-warning" role="alert">
+      <div class="alert aledrt-warning" role="alert">
         <p>Sorteio sera realizado no dia <span class="badge bg-warning text-dark" id="dataFuturaDefinida"></span></p>
       </div>
-
+      {% endfor %}
+      
+      {% if parametros|length == 0%}
+      <div class="alert alert-danger" role="alert">
+        <h5>Atenção</h5>
+        <p>Administrador da sala ainda não definiu os parametros do sorteio.</p>
+      </div>
+      {% else %}
       <h3>Contagem Regressiva: <span class="badge bg-secondary" id="contador"></span></h3>
+      {% endif %}
+      
     </div>
     <br>
     {% for parametro in parametros %}
@@ -50,12 +63,19 @@
               <th scope="col">{{participante.nome}}</th>
               <th scope="col">{{participante.email}}</th>
               <th class="table-success" scope="col">Aprovado</th>
+              
             </tr>
           {% else %}
             <tr>
               <th class="table-danger" scope="col">{{participante.nome}}</th>
               <th class="table-danger" scope="col">{{participante.email}}</th>
-              <th class="table-danger" scope="col">Aguardando aprovação</th>
+              {% if user.is_authenticated and usuariologado == responsavel %}
+                <div class="container table-danger">
+                  <th><a class="btn btn-success" href="{% url 'aprovarParticipante' codigo=codigo participante=participante.email %}">Aprovar</a></th>
+                </div>
+              {% else %}
+                <th class="table-danger" scope="col">Aguardando aprovação</th>
+              {% endif %}
             </tr>
           {% endif %}
           {% endfor %}

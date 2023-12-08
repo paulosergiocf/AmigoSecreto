@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="page">
+  <br>
+  <div class="container">
+    <h3><span class="badge bg-secondary">Criar Sala</span></h3>
+    <a href="{% url 'criarsala' %}" class="btn btn-outline-secondary">Criar</a>
+  </div>
+  <br>
+  <div class="container">
+    <h3><span class="badge bg-secondary">Sala</span></h3>
+    <div class="container text-center">
+      {% for linha,arquivo in diagramacao.items %}
+        <div class="row">
+          {% for sala in arquivo %}
+          <div class="col-lg-4 col-md-12 mb-4 mb-lg-0" style="padding: 0.5rem ">
+            <div class="card-body border embed-responsive embed-responsive-4by3" style="padding: 1rem; border-radius: 0.5rem;">
+              <div class="container">
+                <h5 class="card-title">{{sala.codigoSala}}</h5>
+              </div>
+              <div class="container">
+                <a class="btn btn-primary" href="{% url 'sala' codigo=sala.codigoSala %}">Acessar</a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        {% endfor %}
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  {% endblock %}

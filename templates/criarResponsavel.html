@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="page">
+  <div class="container">
+
+    <form method="post" action="{% url 'cadastrar' %}">
+      {% csrf_token %}
+      <div class="container">
+        <h4>
+          <small class="text-muted">Responsavel Sala</small>
+        </h4>
+        <div class="mb-3">
+          <label for="nome" class="form-label">Nome de Usuário</label>
+          <input type="text" class="form-control" id="username" name="username" 
+                 placeholder="apenas letras, números e traços em um nome de usuário"
+                 minlength="4" maxlength="30"
+                 oninput="validarNomeUsuario(this)"
+                 required>
+      </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" name="email"
+              placeholder="email@example.com" aria-describedby="emailHelp"
+              minlength="11" maxlength="30"
+              pattern="^[a-zA-Z0-9._%+-]+@(gmail\.com|proton\.me|protonmail\.com|hotmail\.com|outlook\.com|yahoo\.com)$"
+              title="Digite um endereço de e-mail válido e com um dos seguintes domínios: @gmail, @proton.me, @protonmail, @hotmail, @outlook, @yahoo."
+              required>
+        </div>
+    
+        <div class="mb-3">
+          <label for="senha" class="form-label">Senha</label>
+          <input type="password" class="form-control" id="password" name="password"
+                 pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_+=])[A-Za-z\d!@#$%^&*()-_+=]{6,}$"
+                 minlength="6" required>
+      </div>
+      
+      <div class="mb-3">
+          <label for="confirmarSenha" class="form-label">Confirmar Senha</label>
+          <input type="password" class="form-control" id="confirmarSenha" name="confirmarSenha"
+                 oninput="checkSenha(this)" required>
+      </div>
+      
+      </div>
+      <button type="submit" class="btn btn-primary">Confirmar</button>
+    </form>
+    <script src="{% static 'js/validarFormularioEntrada.js' %}"></script>
+  </div>
+
+</div>
+
+{% endblock %}

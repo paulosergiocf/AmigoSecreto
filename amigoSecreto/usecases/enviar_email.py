@@ -37,3 +37,4 @@ class ServidorEmail:
         mensagem["Subject"] = email.assunto
         
         return mensagem
+    

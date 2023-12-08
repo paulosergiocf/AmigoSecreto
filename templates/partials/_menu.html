@@ -1,8 +1,8 @@
 {% load static %}
-<div>
+
     <header class="cabecalho">
         <div class="cabecalho__busca">
-            
+
         </div>
     </header>
     <main class="principal">
@@ -10,25 +10,47 @@
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="{% url 'index' %}">
-                        <img src="{% static '/assets/logo/presente.svg' %}" alt="Logo" width="50"  class="d-inline-block align-text-top">
+                        <img src="{% static '/assets/logo/presente.svg' %}" alt="Logo" width="50"
+                            class="d-inline-block align-text-top">
                     </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+                        aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
                             <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Amigo Secreto</a>
                         </div>
+
+                        <div class="navbar-nav">
+                            {% if user.is_authenticated %}
+                            <div class="btn-group">
+                                <a href="{% url 'adminPagina' %}" 
+                                class="btn btn-primary active" aria-current="page">{{ user.username }}</a>
+                                <a href="{% url 'logout' %}" class="btn btn-primary">Sair</a>
+                            </div>
+                            {% else %}
+                            <div class="navbar-nav">
+                                <a class="nav-link active" aria-current="page" href="{% url 'login' %}">Login</a>
+                            </div>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-              </nav>
+            </nav>
         </section>
         {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endfor %}
+        {% for message in messages %}
+        <div class="alert 
+            {% if message.tags == 'success' %}alert-success
+            {% elif message.tags == 'error' %}alert-danger
+            {% else %}alert-warning
+            {% endif %}
+            alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        {% endfor %}
         {% endif %}
-    

@@ -1,7 +1,9 @@
 # forms.py
 from django import forms
-from amigoSecreto.models import Participante, ResponsavelSala, SalaParticipante
+from amigoSecreto.models import Participante, ResponsavelSala, Sala, SalaSorteio
 from django.core.exceptions import ValidationError
+
+from amigoSecreto.usecases.utils import formatar
 
 class ParticipanteForm(forms.ModelForm):
     class Meta:
@@ -9,30 +11,51 @@ class ParticipanteForm(forms.ModelForm):
         fields = ['nome', 'email']
         
         
-    def clean_email(self):
-        email = self.cleaned_data['email']
-
-        servidores = ['@gmail', '@proton.me','@protonmail', '@hotmail', '@outlook', '@yahoo']
-        if not any(servidor in email for servidor in servidores):
-            raise ValidationError('O e-mail deve ter um dos seguintes domínios: @gmail, @proton.me, @protonmail, @hotmail, @outlook, @yahoo.')
-
-
-        return email
+    
+    def clean_nome(self):
+        """
+        Formata nome recebido para salvar como a primeira letra maiuscula no banco de dados.
+        """
+        nome = f"{self.cleaned_data['nome']}"
+        nome = nome.lower()
+        
+        return nome
     
     
 class ResponsavelSalaForm(forms.ModelForm):
     class Meta:
         model = ResponsavelSala
-        fields = ['nome', 'email','senha']
+        fields = ['username', 'email','password']
         
-    def clean_email(self):
-        email = self.cleaned_data['email']
 
-        # Adicione sua lógica de validação personalizada aqui
-        servidores = ['@gmail', '@proton.me','@protonmail', '@hotmail', '@outlook', '@yahoo']
-        if not any(servidor in email for servidor in servidores):
-            raise ValidationError('O e-mail deve ter um dos seguintes domínios: @gmail, @proton.me, @protonmail, @hotmail, @outlook, @yahoo.')
-
-
-        return email
+    def clean_nome(self):
+        """
+        Formata nome recebido para salvar como a primeira letra maiuscula no banco de dados.
+        """
+        username = f"{self.cleaned_data['username']}"
+        username = username.lower()
+        
+        return username
     
+class SalaForm(forms.ModelForm):
+    class Meta:
+        model = Sala
+        fields = ['codigoSala', 'responsavelSala']
+        
+    
+class SalaSorteioForm(forms.ModelForm):
+    class Meta:
+        model = SalaSorteio
+        fields = ['codigoSala', 'dataSorteio', 'valorMaximoPresente', 'situacao']
+        
+    
+    
+class SalaForm(forms.ModelForm):
+    class Meta:
+        model = Sala
+        fields = ['codigoSala', 'responsavelSala']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['codigoSala'].widget.attrs.update({'class': 'form-control'})
+
