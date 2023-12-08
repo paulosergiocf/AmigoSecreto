@@ -30,7 +30,7 @@ class Salas(admin.ModelAdmin):
 admin.site.register(Sala, Salas)
 
 class SalasParticipantes(admin.ModelAdmin):
-    list_display = ('id','codigoSala','email','valido')
+    list_display = ('id','codigoSala','participante','valido')
     list_display_links = ('id', )
 
 admin.site.register(SalaParticipante, SalasParticipantes)
