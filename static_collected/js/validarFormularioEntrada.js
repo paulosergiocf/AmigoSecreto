@@ -14,17 +14,6 @@ function checkSenha(input) {
   }
 }
 
-function validateEmail(input) {
-  const email = input.value;
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  if (!emailRegex.test(email)) {
-    input.setCustomValidity('Digite um endereço de e-mail válido');
-  } else {
-    input.setCustomValidity('');
-  }
-}
-
 
 function validarNomeUsuario(input) {
   // Obtenha o valor do campo
@@ -39,3 +28,5 @@ function validarNomeUsuario(input) {
     input.value = valor.replace(/[^a-zA-Z0-9-]/g, '');
   }
 }
+
+
