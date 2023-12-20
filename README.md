@@ -2,7 +2,7 @@
 
 Projeto criado só para evitar permissões desnecessárias em aplicativos esquisitos no fim do ano.
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://amigosecreto-production.up.railway.app/)
+[![Deploy on Railway](https://railway.app/button.svg)](https://amigosecreto-paulosergiocf.up.railway.app/)
 
 ## Preparando o ambiente
 
